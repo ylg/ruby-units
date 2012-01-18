@@ -939,53 +939,6 @@ describe "Unit Math" do
     specify { Unit("1 km").divmod(Unit("2 m")).should == [500,0] }
   end
 
-  context "Time helper functions" do
-    before do
-      Time.stub!(:now).and_return(Time.utc(2011,10,16))
-      DateTime.stub!(:now).and_return(DateTime.civil(2011,10,16))
-      Date.stub!(:today).and_return(Date.civil(2011,10,16))
-    end
-  
-    context '#since' do
-      specify { Unit("min").since(Time.utc(2001,4,1,0,0,0)).should == Unit("5544000 min")}
-      specify { Unit("min").since(DateTime.civil(2001,4,1,0,0,0)).should == Unit("5544000 min")}
-      specify { Unit("min").since(Date.civil(2001,4,1)).should == Unit("5544000 min")}
-      specify { expect {Unit("min").since("4-1-2001")}.to raise_error(ArgumentError, "Must specify a Time, Date, or DateTime")  }
-      specify { expect {Unit("min").since(nil)}.to raise_error(ArgumentError, "Must specify a Time, Date, or DateTime")  }
-    end
-    
-    context '#before' do
-      specify { Unit("5 min").before(Time.now).should == Time.utc(2011,10,15,23,55)}
-      specify { Unit("5 min").before(DateTime.now).should == DateTime.civil(2011,10,15,23,55)}
-      specify { Unit("5 min").before(Date.today).should == DateTime.civil(2011,10,15,23,55)}
-      specify { expect {Unit('5 min').before(nil)}.to raise_error(ArgumentError, "Must specify a Time, Date, or DateTime")}
-      specify { expect {Unit('5 min').before("12:00")}.to raise_error(ArgumentError, "Must specify a Time, Date, or DateTime")}
-    end
-    
-    context '#ago' do
-      specify { Unit("5 min").ago.should be_kind_of Time}
-      specify { Unit("10000 y").ago.should be_kind_of Time}
-      specify { Unit("1 year").ago.should == Time.utc(2010,10,16)}
-    end
-    
-    context '#until' do
-      specify { Unit("min").until(Date.civil(2011,10,17)).should == Unit("1440 min")}
-      specify { Unit("min").until(DateTime.civil(2011,10,21)).should == Unit("7200 min")}
-      specify { Unit("min").until(Time.utc(2011,10,21)).should == Unit("7200 min")}
-      specify { expect {Unit('5 min').until(nil)}.to raise_error(ArgumentError, "Must specify a Time, Date, or DateTime")}
-      specify { expect {Unit('5 min').until("12:00")}.to raise_error(ArgumentError, "Must specify a Time, Date, or DateTime")}
-    end
-    
-    context '#from' do
-      specify { Unit("1 day").from(Date.civil(2011,10,17)).should == Date.civil(2011,10,18)}
-      specify { Unit("5 min").from(DateTime.civil(2011,10,21)).should == DateTime.civil(2011,10,21,00,05)}
-      specify { Unit("5 min").from(Time.utc(2011,10,21)).should == Time.utc(2011,10,21,00,05)}
-      specify { expect {Unit('5 min').from(nil)}.to raise_error(ArgumentError, "Must specify a Time, Date, or DateTime")}
-      specify { expect {Unit('5 min').from("12:00")}.to raise_error(ArgumentError, "Must specify a Time, Date, or DateTime")}
-    end
-  
-  end
-
 end
 
 describe "Unit Output formatting" do
